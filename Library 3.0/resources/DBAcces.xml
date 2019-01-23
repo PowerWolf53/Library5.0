@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+<dataBase>
+	<url>jdbc:mysql://localhost:330/</url>
+	<driver>com.mysql.jdbc.Driver</driver>
+	<poolsize>10</poolsize>
+	<db>library</db>
+	<user>root</user>
+	<password>root</password>
+</dataBase>

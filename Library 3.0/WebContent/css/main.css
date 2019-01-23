@@ -1,0 +1,70 @@
+
+
+ @font-face {
+    font-family: Philosopher; 
+    src: url(../fonts/Philosopher_Regular.ttf); 
+   }
+
+.row{
+    padding: 0;margin: 0;
+}
+.container-fluid{
+	padding: 0;margin: 0;
+}
+
+
+#block1{
+height: 100%;
+    width:100%;
+    background-image: url(../images/kibrary2.jpg);
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.menu{
+    position: relative; 
+    height:80px;
+   background-color: rgba(0, 0, 0, 0.5);
+}
+
+html{
+    height: 100%;
+}
+
+.nav-text{
+    position:relative;
+    top:25%;
+    left:30%;
+    font-size: 120%;
+    font-family: Philosopher;
+    color: white;
+}
+body{
+   height: 120%; 
+}
+#logout{
+    position:absolute;
+    width:10%;
+    height:10%;
+    right:0;
+    top:0;
+   
+}
+
+#outbutton{
+    position: relative;
+    background: transparent;
+    border:none;
+    outline:none;
+    color:white;
+    background: #03a9f4;
+    padding:10px 20px;
+    cursor:pointer;
+    border-radius: 5px;
+    font-size: 14px;
+    top:20%;
+    left:20%;
+}
+
+
+

@@ -1,0 +1,116 @@
+#header{
+    height:80px;
+    left:0%;
+    right:10%;
+    width:85%;
+    
+    border-radius: 15px;
+   
+}
+
+#subheader{
+    height:60px;
+    width:100%;
+
+    border-radius: 15px;
+	background-color: rgba(0, 0, 0, 0.5);
+	top:0px;
+   
+}
+
+#sub{
+    height:60px;
+    width:100%;
+
+    border-radius: 15px;
+	background-color: rgba(0, 0, 0, 0.5);
+	top:0px;
+   
+}
+
+ @font-face {
+    font-family: Philosopher; 
+    src: url(Philosopher_Regular.ttf); 
+   }
+
+.row{
+    padding: 0;margin: 0;
+}
+.container-fluid{
+	padding: 0;margin: 0;
+}
+
+
+
+
+.menu{
+    position: relative; 
+    height:80px;
+   background-color: rgba(0, 0, 0, 0.5);
+}
+
+
+
+.nav-text{
+    position:relative;
+    top:25%;
+    left:30%;
+    font-size: 120%;
+    font-family: Philosopher;
+    color: white;
+}
+
+
+#logout{
+    position:absolute;
+    width:10%;
+    height:10%;
+    right:0;
+    top:0;
+   
+}
+
+#outbutton{
+    position: relative;
+    background: transparent;
+    border:none;
+    outline:none;
+    color:white;
+    background: #03a9f4;
+    padding:10px 20px;
+    cursor:pointer;
+    border-radius: 5px;
+    font-size: 14px;
+    top:20%;
+    left:20%;
+}
+
+#locale{
+   position:fixed;
+   width:100px;
+   height:50px;
+   bottom:10px;
+   left:30px;
+   background-color:red; 
+}
+
+#gerloc{
+    top:20%;
+    position: relative;
+    width:10%;
+    height:10%;
+}
+
+#engloc{
+    top:50px;
+    position: relative;
+    width:10%;
+    height:10%;
+}
+
+#rusloc{
+    position: relative;
+    width:10%;
+    height:10%;
+}
+
