@@ -24,11 +24,11 @@ public class SQLBookDAO implements BookDAO {
 	public void addBook(Book book, Part file,String fullpath) throws DaoException {
 		ConnectionPool pool=ConnectionManager.getPool();
 		Connection connection=pool.getConnection();
-		String sql="INSERT INTO BOOKS(NAME,IMAGE,DESCRIPTION,AMMOUNT,AUTHOR,SPECIFICATION) VALUES (?,?,?,?,?,?)";
+		
 		PreparedStatement st=null;
 		try {
 			connection.setAutoCommit(false);
-			st=connection.prepareStatement(sql);
+			st=connection.prepareStatement(SQLStatement.ADD_BOOK);
 			st.setString(1, book.getName());
 			st.setString(2, book.getImage());
 			st.setString(3, book.getDescription());
@@ -43,11 +43,11 @@ public class SQLBookDAO implements BookDAO {
 					connection.rollback();
 					e.printStackTrace();
 				} catch (SQLException e1) {
-					throw new DaoException("Connection problems",e);
+					throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 				}
-				throw new DaoException("Connection problems",e);
+				throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			} catch (IOException e) {
-				throw new DaoException("Connection problems",e);
+				throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}finally {
 				try {
 					if(connection!=null) {
@@ -56,7 +56,7 @@ public class SQLBookDAO implements BookDAO {
 					pool.freeConnection(connection);
 					}
 				} catch (SQLException e) {
-					throw new DaoException("Connection problems",e);
+					throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}
 			}
 		
@@ -65,13 +65,13 @@ public class SQLBookDAO implements BookDAO {
 	@Override
 	public int getBookId(String name) throws DaoException {
 		int id=0;
-		String sql="SELECT *FROM BOOKS";
+		
 		ConnectionPool pool=ConnectionManager.getPool();
 		Connection connection=pool.getConnection();
 		Statement st=null; 
 		try {
 			st=connection.createStatement();
-			ResultSet rs = st.executeQuery(sql);
+			ResultSet rs = st.executeQuery(SQLStatement.GET_BOOK_ID);
 			while(rs.next())
 			{	
 				if(rs.getString("name").equals(name)) {
@@ -79,14 +79,17 @@ public class SQLBookDAO implements BookDAO {
 				}
 			}
 			} catch (SQLException e) {
-				throw new DaoException("Connection problems",e);
+				throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}finally {
 				try {
-					st.close();
-					pool.freeConnection(connection);
+					if(connection!=null) {
+						connection.setAutoCommit(true);
+						st.close();
+						pool.freeConnection(connection);
+						}
 					
 				} catch (SQLException e) {
-					throw new DaoException("Connection problems",e);
+					throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}
 			}
 		return id;
@@ -96,21 +99,24 @@ public class SQLBookDAO implements BookDAO {
 	public void ChangeBookAmmoutn(int id,int number) throws DaoException {
 		ConnectionPool pool=ConnectionManager.getPool();
 		Connection connection=pool.getConnection();
-		String sql="UPDATE BOOKS SET ammount=? WHERE id=?";
+		
 		PreparedStatement st=null; 
 		try {
-			st=connection.prepareStatement(sql);
+			st=connection.prepareStatement(SQLStatement.CHANGE_BOOK_AMMOUNT);
 			st.setInt(1, number);
 			st.setInt(2, id);
 			st.executeUpdate();
 			} catch (SQLException e) {
-				throw new DaoException("Connection problems",e);
+				throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}finally {
 				try {
-					st.close();
-					pool.freeConnection(connection);				
+					if(connection!=null) {
+						connection.setAutoCommit(true);
+						st.close();
+						pool.freeConnection(connection);
+						}				
 				} catch (SQLException e) {
-					throw new DaoException("Connection problems",e);
+					throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}
 			}
 
@@ -120,13 +126,13 @@ public class SQLBookDAO implements BookDAO {
 	@Override
 	public int getBookAmmount(int id) throws DaoException {
 		int ammount=0;
-		String sql="SELECT *FROM BOOKS";
+	
 		ConnectionPool pool=ConnectionManager.getPool();
 		Connection connection=pool.getConnection();
 		Statement st=null; 
 		try {
 			st=connection.createStatement();
-			ResultSet rs = st.executeQuery(sql);
+			ResultSet rs = st.executeQuery(SQLStatement.GET_BOOK_AMMOUNT);
 			while(rs.next())
 			{	
 				if(rs.getInt("id")==id) {
@@ -134,14 +140,17 @@ public class SQLBookDAO implements BookDAO {
 				}
 			}
 			} catch (SQLException e) {
-				throw new DaoException("Connection problems",e);
+				throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}finally {
 				try {
-					st.close();
-					pool.freeConnection(connection);
+					if(connection!=null) {
+						connection.setAutoCommit(true);
+						st.close();
+						pool.freeConnection(connection);
+						}
 					
 				} catch (SQLException e) {
-					throw new DaoException("Connection problems",e);
+					throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}
 			}
 		return ammount;
@@ -150,13 +159,13 @@ public class SQLBookDAO implements BookDAO {
 	@Override
 	public List<Book> getAllBooks() throws DaoException {
 		List<Book> bookList = new ArrayList<>();
-		String sql="SELECT *FROM BOOKS";
+		
 		ConnectionPool pool=ConnectionManager.getPool();
 		Connection connection=pool.getConnection();
 		Statement st=null; 
 		try {
 			st=connection.createStatement();
-			ResultSet rs = st.executeQuery(sql);
+			ResultSet rs = st.executeQuery(SQLStatement.GET_ALL_BOOKS);
 			while(rs.next())
 			{	
 				int id=rs.getInt("id");
@@ -169,14 +178,17 @@ public class SQLBookDAO implements BookDAO {
 				bookList.add(new Book(id,name,author,image,ammount,specification,description));
 			}
 			} catch (SQLException e) {
-				throw new DaoException("Connection problems",e);
+				throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}finally {
 				try {
-					st.close();
-					pool.freeConnection(connection);
+					if(connection!=null) {
+						connection.setAutoCommit(true);
+						st.close();
+						pool.freeConnection(connection);
+						}
 					
 				} catch (SQLException e) {
-					throw new DaoException("Connection problems",e);
+					throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}
 			}
 		return bookList;
@@ -185,13 +197,13 @@ public class SQLBookDAO implements BookDAO {
 	@Override
 	public Book getBook(int id) throws DaoException {
 		Book book=null;
-		String sql="SELECT *FROM BOOKS";
+		
 		ConnectionPool pool=ConnectionManager.getPool();
 		Connection connection=pool.getConnection();
 		Statement st=null; 
 		try {
 			st=connection.createStatement();
-			ResultSet rs = st.executeQuery(sql);
+			ResultSet rs = st.executeQuery(SQLStatement.GET_ALL_BOOKS);
 			while(rs.next())
 			{	
 				if(rs.getInt("id")==id) {
@@ -207,17 +219,20 @@ public class SQLBookDAO implements BookDAO {
 				
 			}
 			if(book==null) {
-				throw new DaoException("Book not found");
+				throw new DaoException(DAOWarning.BOOK_NOT_FOUND);
 				
 			}
 			} catch (SQLException e) {
-				throw new DaoException("Connection problems",e);
+				throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}finally {
 				try {
-					st.close();
-					pool.freeConnection(connection);	
+					if(connection!=null) {
+						connection.setAutoCommit(true);
+						st.close();
+						pool.freeConnection(connection);
+						}
 				} catch (SQLException e) {
-					throw new DaoException("Connection problems",e);
+					throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}
 			}
 		return book;
@@ -226,15 +241,13 @@ public class SQLBookDAO implements BookDAO {
 	@Override
 	public List<BookOrder> getOrders() throws DaoException {
 		List<BookOrder> orderList = new ArrayList<>();
-		String sql="SELECT bookqueries.id,userprofile.name,books.name,userprofile.users_id,books.id\r\n" + 
-				"FROM bookqueries INNER JOIN userprofile INNER JOIN books\r\n" + 
-				"ON bookqueries.users_id=userprofile.users_id AND bookqueries.book_id=books.id";
+		
 		ConnectionPool pool=ConnectionManager.getPool();
 		Connection connection=pool.getConnection(); 
 		Statement st=null; 
 		try {
 			st=connection.createStatement();
-			ResultSet rs = st.executeQuery(sql);
+			ResultSet rs = st.executeQuery(SQLStatement.GET_ORDERS);
 			while(rs.next())
 			{	
 				int id=rs.getInt(1);
@@ -245,14 +258,17 @@ public class SQLBookDAO implements BookDAO {
 				orderList.add(new BookOrder(id,bookId,userId,userName,bookName));
 			}
 			} catch (SQLException e) {
-				throw new DaoException("Connection problems",e);
+				throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}finally {
 				try {
-					st.close();
-					pool.freeConnection(connection);
+					if(connection!=null) {
+						connection.setAutoCommit(true);
+						st.close();
+						pool.freeConnection(connection);
+						}
 					
 				} catch (SQLException e) {
-					throw new DaoException("Connection problems",e);
+					throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}
 			}
 		
@@ -263,16 +279,14 @@ public class SQLBookDAO implements BookDAO {
 	@Override
 	public List<PrivateBook> getPrivateBooks(int id) throws DaoException {
 		List<PrivateBook> bookList = new ArrayList<>();
-		String sql="SELECT privatebooks.id,books.name,books.author,privatebooks.expiredate FROM privatebooks\r\n" + 
-				"INNER JOIN books\r\n" + 
-				" ON privatebooks.books_id=books.id\r\n" + 
-				" WHERE privatebooks.users_id="+id;
+		
 		ConnectionPool pool=ConnectionManager.getPool();
 		Connection connection=pool.getConnection();
 		PreparedStatement st=null; 
 		try {
-			st=connection.prepareStatement(sql);
-			ResultSet rs = st.executeQuery(sql);
+			st=connection.prepareStatement(SQLStatement.GET_PRIVATE_BOOKS);
+			st.setInt(1, id);
+			ResultSet rs = st.executeQuery();
 			while(rs.next())
 			{	
 			 int orderId=rs.getInt(1);
@@ -282,14 +296,17 @@ public class SQLBookDAO implements BookDAO {
 			 bookList.add(new PrivateBook(orderId,name,author,expireDate));
 			}
 			} catch (SQLException e) {
-				throw new DaoException("Connection problems",e);
+				throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}finally {
 				try {
-					st.close();
-					pool.freeConnection(connection);
+					if(connection!=null) {
+						connection.setAutoCommit(true);
+						st.close();
+						pool.freeConnection(connection);
+						}
 					
 				} catch (SQLException e) {
-					throw new DaoException("Connection problems",e);
+					throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}
 			}
 		return bookList;
@@ -299,16 +316,15 @@ public class SQLBookDAO implements BookDAO {
 	@Override
 	public List<PrivateBookOrder> getPrivateOrders(int id) throws DaoException {
 		List<PrivateBookOrder> bookOrderList = new ArrayList<>();
-		String sql="SELECT bookqueries.id,books.name,books.author\r\n" + 
-				"FROM bookqueries INNER JOIN books\r\n" + 
-				"ON bookqueries.book_id=books.id\r\n" + 
-				"WHERE bookqueries.users_id="+id;
+		
 		ConnectionPool pool=ConnectionManager.getPool();
 		Connection connection=pool.getConnection();
-		Statement st=null; 
+		PreparedStatement st=null; 
 		try {
-			st=connection.createStatement();
-			ResultSet rs = st.executeQuery(sql);
+			st=connection.prepareStatement(SQLStatement.GET_PRIVATE_ORDERS);
+			st.setInt(1, id);
+			
+			ResultSet rs = st.executeQuery();
 			while(rs.next())
 			{	
 			 int orderId=rs.getInt(1);
@@ -318,14 +334,17 @@ public class SQLBookDAO implements BookDAO {
 			 bookOrderList.add(new PrivateBookOrder(orderId,name,author));
 			}
 			} catch (SQLException e) {
-				throw new DaoException("Connection problems",e);
+				throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}finally {
 				try {
-					st.close();
-					pool.freeConnection(connection);
+					if(connection!=null) {
+						connection.setAutoCommit(true);
+						st.close();
+						pool.freeConnection(connection);
+						}
 					
 				} catch (SQLException e) {
-					throw new DaoException("Connection problems",e);
+					throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}
 			}
 		return bookOrderList;
@@ -335,13 +354,12 @@ public class SQLBookDAO implements BookDAO {
 	@Override
 	public String getPrivateBookName(int privateBookId) throws DaoException {
 		String name=null;
-		String sql="SELECT books.name FROM books \r\n" + 
-				"WHERE books.id=(SELECT privatebooks.books_id FROM privatebooks WHERE privatebooks.id=?)";
+		
 		ConnectionPool pool=ConnectionManager.getPool();
 		Connection connection=pool.getConnection();
 		PreparedStatement st=null; 
 		try {
-			st=connection.prepareStatement(sql);
+			st=connection.prepareStatement(SQLStatement.GET_PRIVATE_BOOK_NAME);
 			st.setInt(1, privateBookId);
 			ResultSet rs = st.executeQuery();
 			while(rs.next())
@@ -352,13 +370,16 @@ public class SQLBookDAO implements BookDAO {
 			}
 			
 			} catch (SQLException e) {
-				throw new DaoException("Connection problems",e);
+				throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}finally {
 				try {
-					st.close();
-					pool.freeConnection(connection);	
+					if(connection!=null) {
+						connection.setAutoCommit(true);
+						st.close();
+						pool.freeConnection(connection);
+						}	
 				} catch (SQLException e) {
-					throw new DaoException("Connection problems",e);
+					throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}
 			}
 		return name;

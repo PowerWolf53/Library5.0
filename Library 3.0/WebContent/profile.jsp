@@ -38,22 +38,22 @@
 
 	
 	<div onclick="switch_books()"  style="cursor:pointer;height:30px;width:120px;position:relative;background-color:rgba(182, 255, 10, 0.5);top:120px;left:0%;border-radius:15px;">
-	 <a style="font-family:Philosopher;top:10%;left:5%;position:relative">Личные книги</a>
+	 <a style="font-family:Philosopher;top:10%;left:5%;position:relative">${bundle.getString('private_books')}</a>
 	</div>
 	
 	<div  onclick="switch_book_orders()" style="text-align:center;cursor:pointer;height:30px;width:80px;position:relative;background-color:rgba(182, 255, 10, 0.5);top:90px;left:90%;border-radius:15px;">
-	  <a style="font-family:Philosopher;top:10%;position:relative;">Заказы</a>
+	  <a style="font-family:Philosopher;top:10%;position:relative;">${bundle.getString('orders')}</a>
 	</div>
 	
-	<a onclick="switchEditProfile()" id="red">Редактировать</a>
+	<a onclick="switchEditProfile()" id="red">${bundle.getString('edit')}</a>
 	
 	<div  id="books" style="display:none">
 	<table id="table" border="1" width="100%" cellpadding="5">
    <tr>
-    <td>Номер книги</td>
-    <th>Название книги</th>
-	  <th>Автор книги</th>
-    <th>Дата сдачи</th>
+    <td>${bundle.getString('book_id')}</td>
+    <th>${bundle.getString('book_name')}</th>
+	  <th>${bundle.getString('author_name')}</th>
+    <th>${bundle.getString('refund_date')}</th>
    </tr>
    
    
@@ -75,10 +75,10 @@
    <div  id="bookorders" style="display:block">
 	<table id="table" border="1" width="100%" cellpadding="5">
    <tr>
-   <th>Номер заказа</th>
-    <th>Название книги</th>
-	 <th>Автор книги</th>
-	<th>Отмена заказа</th>
+   <th>${bundle.getString('order_id')}</th>
+    <th>${bundle.getString('book_name')}</th>
+	 <th>${bundle.getString('author_name')}</th>
+	<th>${bundle.getString('cancel_order')}</th>
    </tr>
    
     <c:forEach var="order" items="${orders}" >
@@ -86,7 +86,7 @@
    <th>${order.getId()}</th>
     <td>${order.getName()}</td>
 	    <td>${order.getAuthor()}</td>
-	<th onclick="cancel_order('${order.getId()}')" id="cancel">Отменить</th>
+	<th onclick="cancel_order('${order.getId()}')" id="cancel">${bundle.getString('cancel_order')}</th>
   </tr>
   </c:forEach>
   </table>
@@ -99,7 +99,7 @@
 	</div>
 	 <div id="editarea" style="display:none">
 	
-		<a  style="cursor:pointer;position:relative;top:50px;left:35%;font-size:20pt;font-family:Philosopher;color:white;">Редактировние профиля</a>
+		<a  style="cursor:pointer;position:relative;top:50px;left:35%;font-size:20pt;font-family:Philosopher;color:white;">${bundle.getString('edit_profile')}</a>
 			
 			<div id="box1" class="box" style="display:block" >
      
@@ -107,18 +107,18 @@
                 
                 <div class="inputBox">
                     <input type="text" name="name" >
-                    <label >Новое имя</label>
+                    <label >${bundle.getString('user_name')}</label>
                 </div>
                 
                 <div class="inputBox">
                     <input type="text" name="surname">
-                    <label >Новая Фамилия</label>
+                    <label >${bundle.getString('user_surname')}</label>
                 </div>
                 
                   <div id="file">
                 <input type="file" name="userfile" >
-                <label style="color:white;top:50px;position:absolute;left:0px" >Сменить аватарку</label>
-                 <a onclick="switchProfile()" style="cursor:pointer;position:absolute;top:90px;right:0px;">Вернуться в профиль</a>
+                <label style="color:white;top:50px;position:absolute;left:0px" >${bundle.getString('change_avatar')}</label>
+                 <a onclick="switchProfile()" style="cursor:pointer;position:absolute;top:90px;right:0px;">${bundle.getString('back_to_profile')}</a>
                 </div>
                 
                 <input   type="submit" name="" value="Submit">

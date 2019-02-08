@@ -19,35 +19,35 @@
             
         <div id="core" style="background-image: url(images/desk.jpg)">
                 <div id="box1" class="box" style="display: block">
-            <h2>Book addition</h2>
+            <h2>${bundle.getString('book_addition')}</h2>
             <form  enctype="multipart/form-data"  action="LibraryServlet" method="POST">
                 
                 <div class="inputBox">
-                    <input type="text" name="name" required="" >
-                    <label >Name</label>
+                    <input type="text" name="name" required="true" >
+                    <label >${bundle.getString('book_name')}</label>
                 </div>
                 
                 <div class="inputBox">
                     <input type="text" name="author" required="" >
-                    <label >Author</label>
+                    <label >${bundle.getString('author_name')}</label>
                 </div>
                 
                 
                 
                 <div class="inputBox">
                     <input type="text" name="specification" required="" >
-                    <label >Specification</label>
+                    <label >${bundle.getString('specification')}</label>
                 </div>
                 
                 <div class="inputBox">
                     <input id="ammount" type="text" name="ammount" required="" onchange="verification()" >
-                    <label >Amount<div id="not"><a >Wrong number </a></div></label>
+                    <label >${bundle.getString('amount')}<div id="not"><a >${bundle.getString('wrong_number')} </a></div></label>
                 </div>
                 
                 
                 
                 <div class="inputBox">
-                <textarea name="description" cols="45" rows="4" placeholder="Описание"></textarea>
+                <textarea name="description" cols="45" rows="4" placeholder="${bundle.getString('description')}"></textarea>
                 </div>
                 
                 <div id="file">
@@ -56,51 +56,50 @@
                 
                  <input id="subm"  type="submit" name="" value="Submit" >
                  <input  type="hidden" name="command" value="bookaddition">
-                 <input  type="hidden" name="folder" value=<%= request.getServletContext().getRealPath("/") %>>
-                 <a onclick="switcher2()" style="cursor:pointer;position:relative;left:30%;color:white;">Amount addition</a>
-                 <p onclick="switcher3()" style="cursor:pointer;position:relative;left:58%;top:10%;color:white;">Book refund</p>
+                 <a onclick="switcher2()" style="cursor:pointer;position:relative;left:30%;color:white;">${bundle.getString('amount_addition')}</a>
+                 <p onclick="switcher3()" style="cursor:pointer;position:relative;left:58%;top:10%;color:white;">${bundle.getString('book_refund')}</p>
             </form>
            
         </div>
         
         <div id="box2" class="box" style="display: none">
-            <h2>Book increment</h2>
+            <h2>${bundle.getString('book_increment')}</h2>
             <form   action="LibraryServlet" method="POST">
                 
                 <div class="inputBox">
                     <input type="text" name="name" required="" >
-                    <label >Name</label>
+                    <label >${bundle.getString('book_name')}</label>
                     
                 </div>
  
    
                 <div class="inputBox">
                     <input id="ammount2" type="text" name="ammount" required="" onchange="second_verification()" >
-                    <label >Ammount <div id="not2"><a >Wrong number </a></div></label>
+                    <label >${bundle.getString('amount')} <div id="not2"><a >${bundle.getString('wrong_number')} </a></div></label>
                 </div>
                 
 
                 
                  <input id="subm2"  type="submit" name="" value="Submit" disabled >
                  <input  type="hidden" name="command" value="bookincrement">
-				 <a onclick="switcher1()" style="cursor:pointer;position:relative;left:30%;color:white;">Book addition</a>
-				 <p onclick="switcher3()" style="cursor:pointer;position:relative;left:58%;top:10%;color:white;">Book Refund</p>
+				 <a onclick="switcher1()" style="cursor:pointer;position:relative;left:30%;color:white;">${bundle.getString('book_addition')}</a>
+				 <p onclick="switcher3()" style="cursor:pointer;position:relative;left:58%;top:10%;color:white;">${bundle.getString('book_refund')}</p>
             </form>
         </div>
         
          <div id="box3" class="box" style="display: none">
-            <h2>Book refund</h2>
+            <h2>${bundle.getString('book_refund')}</h2>
             <form    action="LibraryServlet" method="POST">
                 
                 <div class="inputBox">
                     <input type="text" name="private_book_id" required="true" >
-                    <label >Order Id</label>
+                    <label >${bundle.getString('order_id')}</label>
                 </div>
                 
                  <input id="subm"  type="submit" name="" value="Submit" >
                  <input  type="hidden" name="command" value="refund_book">
-                 <a onclick="switcher2()" style="cursor:pointer;position:relative;left:30%;color:white;">Amount addition</a>
-                  <p onclick="switcher1()" style="cursor:pointer;position:relative;left:58%;top:10%;color:white;">Book addition</p>
+                 <a onclick="switcher2()" style="cursor:pointer;position:relative;left:30%;color:white;">${bundle.getString('amount_addition')}</a>
+                  <p onclick="switcher1()" style="cursor:pointer;position:relative;left:58%;top:10%;color:white;">${bundle.getString('book_addition')}</p>
             </form>
            
         </div>

@@ -11,6 +11,7 @@ import java.util.List;
 
 import javax.servlet.http.Part;
 
+import by.etc.library.bean.Book;
 import by.etc.library.bean.User;
 import by.etc.library.bean.UserBook;
 
@@ -22,16 +23,15 @@ public class SQLUserDao implements UserDAO {
 		ConnectionPool pool=ConnectionManager.getPool();
 		Connection connection=pool.getConnection();
 		
-		String sql="INSERT INTO USERS(LOGIN,PASSWORD) VALUES (?,?)";
-		String sql2="INSERT  INTO `library`.`userprofile` (users_id,name,surname) VALUES ((SELECT id FROM `library`.`users` WHERE login=\""+login+"\"),\""+name+"\",\""+surname+"\")";
+		
 		
 		PreparedStatement st=null; 
 		PreparedStatement st2=null;
 		
 		try {
 			connection.setAutoCommit(false);
-			st=connection.prepareStatement(sql);
-			st2=connection.prepareStatement(sql2);
+			st=connection.prepareStatement(SQLStatement.USER_ADDITION);
+			st2=connection.prepareStatement(SQLStatement.USER_PROFILE_ADDITION);
 			
 			
 			st.setString(1, login);
@@ -40,6 +40,9 @@ public class SQLUserDao implements UserDAO {
 			
 		
 			st.execute();
+			st2.setString(1, login);
+			st2.setString(2, name);
+			st2.setString(3, surname);
 			st2.execute();
 			
 			
@@ -50,9 +53,9 @@ public class SQLUserDao implements UserDAO {
 					connection.rollback();
 					e.printStackTrace();
 				} catch (SQLException e1) {
-					throw new DaoException("Connection problems",e);
+					throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 				}
-				throw new DaoException("Connection problems",e);
+				throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}finally {
 				try {
 					if(connection!=null) {
@@ -61,7 +64,7 @@ public class SQLUserDao implements UserDAO {
 					pool.freeConnection(connection);
 					}
 				} catch (SQLException e) {
-					throw new DaoException("Connection problems",e);
+					throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}
 			}
 		
@@ -71,19 +74,24 @@ public class SQLUserDao implements UserDAO {
 	public void changePassword(int id, String newPassword) throws DaoException {
 		ConnectionPool pool=ConnectionManager.getPool();
 		Connection connection=pool.getConnection();
-		String sql="UPDATE USERS SET password="+newPassword+" WHERE id="+id;
+		
 		PreparedStatement st=null; 
 		try {
-			st=connection.prepareStatement(sql);
+			st=connection.prepareStatement(SQLStatement.USER_PASSWORD_EDITION);
+			st.setString(1, newPassword);
+			st.setInt(2, id);
 			st.executeUpdate();
 			} catch (SQLException e) {
-				throw new DaoException("Connection problems",e);
+				throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}finally {
 				try {
-					st.close();
-					pool.freeConnection(connection);				
+					if(connection!=null) {
+						connection.setAutoCommit(true);
+						st.close();
+						pool.freeConnection(connection);
+						}				
 				} catch (SQLException e) {
-					throw new DaoException("Connection problems",e);
+					throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}
 			}
 	}
@@ -93,11 +101,10 @@ public class SQLUserDao implements UserDAO {
 		int id=0;
 		ConnectionPool pool=ConnectionManager.getPool();
 		Connection connection=pool.getConnection();
-		String sql="SELECT * FROM USERS";
 		Statement st=null; 
 		try {
 			st=connection.createStatement();
-			ResultSet rs = st.executeQuery(sql);
+			ResultSet rs = st.executeQuery(SQLStatement.SELECT_ALL_USERS);
 			while(rs.next())
 			{	
 				if(rs.getString("login").equals(login)&&rs.getString("password").equals(password)) {
@@ -105,14 +112,17 @@ public class SQLUserDao implements UserDAO {
 				}
 			}
 			} catch (SQLException e) {
-				throw new DaoException("Connection problems",e);
+				throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}finally {
 				try {
-					st.close();
-					pool.freeConnection(connection);
+					if(connection!=null) {
+						connection.setAutoCommit(true);
+						st.close();
+						pool.freeConnection(connection);
+						}
 					
 				} catch (SQLException e) {
-					throw new DaoException("Connection problems",e);
+					throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}
 			}
 		return id;
@@ -123,11 +133,10 @@ public class SQLUserDao implements UserDAO {
 	     String status=null;
 	     ConnectionPool pool=ConnectionManager.getPool();
 			Connection connection=pool.getConnection();
-			String sql="SELECT * FROM USERS";
 			Statement st=null; 
 			try {
 				st=connection.createStatement();
-				ResultSet rs = st.executeQuery(sql);
+				ResultSet rs = st.executeQuery(SQLStatement.SELECT_ALL_USERS);
 				while(rs.next())
 				{	
 					if(rs.getInt("id")==id)
@@ -136,14 +145,17 @@ public class SQLUserDao implements UserDAO {
 					}
 				}
 				} catch (SQLException e) {
-					throw new DaoException("Connection problems",e);
+					throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 				}finally {
 					try {
-						st.close();
-						pool.freeConnection(connection);
+						if(connection!=null) {
+							connection.setAutoCommit(true);
+							st.close();
+							pool.freeConnection(connection);
+							}
 						
 					} catch (SQLException e) {
-						throw new DaoException("Connection problems",e);
+						throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 				}
 				}
 			return status;
@@ -155,10 +167,10 @@ public class SQLUserDao implements UserDAO {
 		ConnectionPool pool=ConnectionManager.getPool();
 		Connection connection=pool.getConnection();
 		
-		String sql="INSERT INTO bookqueries(book_id,users_id) VALUES (?,?)";
+		
 		PreparedStatement st=null; 
 		try {	
-			st=connection.prepareStatement(sql);		
+			st=connection.prepareStatement(SQLStatement.ORDER_BOOK);		
 			st.setInt(1, bookId);
 			st.setInt(2, userId);
 			st.execute();
@@ -167,9 +179,9 @@ public class SQLUserDao implements UserDAO {
 					connection.rollback();
 					e.printStackTrace();
 				} catch (SQLException e1) {
-					throw new DaoException("Connection problems",e);
+					throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 				}
-				throw new DaoException("Connection problems",e);
+				throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}finally {
 				try {
 					if(connection!=null) {
@@ -178,7 +190,7 @@ public class SQLUserDao implements UserDAO {
 					pool.freeConnection(connection);
 					}
 				} catch (SQLException e) {
-					throw new DaoException("Connection problems",e);
+					throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}
 			}
 		
@@ -192,11 +204,11 @@ public class SQLUserDao implements UserDAO {
 		
 		ConnectionPool pool=ConnectionManager.getPool();
 		Connection connection=pool.getConnection();
-		String sql="SELECT * FROM bookqueries";
+		
 		Statement st=null; 
 		try {
 			st=connection.createStatement();
-			ResultSet rs = st.executeQuery(sql);
+			ResultSet rs = st.executeQuery(SQLStatement.SELECT_ALL_QUERIES);
 			while(rs.next())
 			{	
 				if(rs.getInt("book_id")==bookId&&rs.getInt("users_id")==userId)
@@ -205,14 +217,14 @@ public class SQLUserDao implements UserDAO {
 				}
 			}
 			} catch (SQLException e) {
-				throw new DaoException("Connection problems",e);
+				throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}finally {
 				try {
 					st.close();
 					pool.freeConnection(connection);
 					
 				} catch (SQLException e) {
-					throw new DaoException("Connection problems",e);
+					throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}
 			}
 		return id;
@@ -224,21 +236,25 @@ public class SQLUserDao implements UserDAO {
 		
 		ConnectionPool pool=ConnectionManager.getPool();
 		Connection connection=pool.getConnection();
-		String sql="DELETE FROM bookqueries WHERE id="+orderId;
-		Statement st=null; 
+		
+		PreparedStatement st=null; 
 		try {
 			
-			st=connection.prepareStatement(sql);
-			st.execute(sql);
+			st=connection.prepareStatement(SQLStatement.DELETE_ORDER);
+			st.setInt(1, orderId);
+			st.execute();
 			} catch (SQLException e) {
-				throw new DaoException("Connection problems",e);
+				throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}finally {
 				try {
-					st.close();
-					pool.freeConnection(connection);
+					if(connection!=null) {
+						connection.setAutoCommit(true);
+						st.close();
+						pool.freeConnection(connection);
+						}
 					
 				} catch (SQLException e) {
-					throw new DaoException("Connection problems",e);
+					throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}
 			}
 	}
@@ -249,16 +265,16 @@ public class SQLUserDao implements UserDAO {
 		ConnectionPool pool=ConnectionManager.getPool();
 		Connection connection=pool.getConnection();
 		
-		String sql="DELETE FROM bookqueries WHERE id="+orderId;
-		String sql2="INSERT INTO `library`.`privatebooks` (`users_id`, `books_id`, `expiredate`) VALUES (?, ?, ?)";
+
 		
 		PreparedStatement st=null; 
 		PreparedStatement st2=null;
 		
 		try {
 			connection.setAutoCommit(false);
-			st=connection.prepareStatement(sql);
-			st2=connection.prepareStatement(sql2);
+			st=connection.prepareStatement(SQLStatement.DELETE_ORDER);
+			st2=connection.prepareStatement(SQLStatement.SUBMIT_ORDER);
+			st.setInt(1, orderId);
 			st2.setInt(1, userId);
 			st2.setInt(2, bookId);
 			st2.setString(3, date);
@@ -270,9 +286,9 @@ public class SQLUserDao implements UserDAO {
 					connection.rollback();
 					e.printStackTrace();
 				} catch (SQLException e1) {
-					throw new DaoException("Connection problems",e);
+					throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 				}
-				throw new DaoException("Connection problems",e);
+				throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}finally {
 				try {
 					if(connection!=null) {
@@ -281,7 +297,7 @@ public class SQLUserDao implements UserDAO {
 					pool.freeConnection(connection);
 					}
 				} catch (SQLException e) {
-					throw new DaoException("Connection problems",e);
+					throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}
 			}
 	}
@@ -291,11 +307,10 @@ public class SQLUserDao implements UserDAO {
 		boolean flag=false; 
 		ConnectionPool pool=ConnectionManager.getPool();
 		Connection connection=pool.getConnection();
-		String sql="SELECT * FROM USERS";
 		Statement st=null; 
 		try {
 			st=connection.createStatement();
-			ResultSet rs = st.executeQuery(sql);
+			ResultSet rs = st.executeQuery(SQLStatement.SELECT_ALL_USERS);
 			while(rs.next())
 			{	
 				if(rs.getString("login").equals(login)||rs.getString("password").equals(password)) {
@@ -303,14 +318,17 @@ public class SQLUserDao implements UserDAO {
 				}
 			}
 			} catch (SQLException e) {
-				throw new DaoException("Connection problems",e);
+				throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}finally {
 				try {
-					st.close();
-					pool.freeConnection(connection);
+					if(connection!=null) {
+						connection.setAutoCommit(true);
+						st.close();
+						pool.freeConnection(connection);
+						}
 					
 				} catch (SQLException e) {
-					throw new DaoException("Connection problems",e);
+					throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}
 			}
 		return flag;
@@ -321,11 +339,12 @@ public class SQLUserDao implements UserDAO {
 		User user=null;
 		ConnectionPool pool=ConnectionManager.getPool();
 		Connection connection=pool.getConnection();
-		String sql="SELECT * FROM userprofile WHERE users_id="+id;
-		Statement st=null; 
+		
+		PreparedStatement st=null; 
 		try {
-			st=connection.createStatement();
-			ResultSet rs = st.executeQuery(sql);
+			st=connection.prepareStatement(SQLStatement.GET_USER_INFO);
+			st.setInt(1, id);
+			ResultSet rs = st.executeQuery();
 		
 		
 			while(rs.next())
@@ -336,14 +355,17 @@ public class SQLUserDao implements UserDAO {
 				user=new User(name,surname,image);
 			}
 			} catch (SQLException e) {
-				throw new DaoException("Connection problems",e);
+				throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}finally {
 				try {
-					st.close();
-					pool.freeConnection(connection);
+					if(connection!=null) {
+						connection.setAutoCommit(true);
+						st.close();
+						pool.freeConnection(connection);
+						}
 					
 				} catch (SQLException e) {
-					throw new DaoException("Connection problems",e);
+					throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}
 			}
 		return user;
@@ -352,15 +374,13 @@ public class SQLUserDao implements UserDAO {
 	@Override
 	public List<UserBook> getUserBooks() throws DaoException {
 		List<UserBook> bookList = new ArrayList<>();
-		String sql="SELECT privatebooks.id,books.name,books.author,userprofile.name,userprofile.surname,privatebooks.expiredate\r\n" + 
-				"FROM privatebooks INNER JOIN books INNER JOIN userprofile\r\n" + 
-				"ON privatebooks.books_id=books.id AND privatebooks.users_id=userprofile.users_id";
+		
 		ConnectionPool pool=ConnectionManager.getPool();
 		Connection connection=pool.getConnection();
 		Statement st=null; 
 		try {
 			st=connection.createStatement();
-			ResultSet rs = st.executeQuery(sql);
+			ResultSet rs = st.executeQuery(SQLStatement.GET_USER_BOOKS);
 			while(rs.next())
 			{	
 				int orderNumber=rs.getInt(1);
@@ -372,14 +392,17 @@ public class SQLUserDao implements UserDAO {
 				bookList.add(new UserBook(orderNumber,bookName,bookAuthor,userName,userSurname,expireDate));
 			}
 			} catch (SQLException e) {
-				throw new DaoException("Connection problems",e);
+				throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}finally {
 				try {
-					st.close();
-					pool.freeConnection(connection);
+					if(connection!=null) {
+						connection.setAutoCommit(true);
+						st.close();
+						pool.freeConnection(connection);
+						}
 					
 				} catch (SQLException e) {
-					throw new DaoException("Connection problems",e);
+					throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}
 			}
 		return bookList;
@@ -389,21 +412,25 @@ public class SQLUserDao implements UserDAO {
 	public void deletePrivateBook(int id) throws DaoException {
 		ConnectionPool pool=ConnectionManager.getPool();
 		Connection connection=pool.getConnection();
-		String sql="DELETE FROM privatebooks WHERE id="+id;
-		Statement st=null; 
+		
+		PreparedStatement st=null; 
 		try {
 			
-			st=connection.prepareStatement(sql);
-			st.execute(sql);
+			st=connection.prepareStatement(SQLStatement.DELETE_PRIVATE_BOOK);
+			st.setInt(1, id);
+			st.execute();
 			} catch (SQLException e) {
-				throw new DaoException("Connection problems",e);
+				throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}finally {
 				try {
-					st.close();
-					pool.freeConnection(connection);
+					if(connection!=null) {
+						connection.setAutoCommit(true);
+						st.close();
+						pool.freeConnection(connection);
+						}
 					
 				} catch (SQLException e) {
-					throw new DaoException("Connection problems",e);
+					throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}
 			}
 		
@@ -414,23 +441,27 @@ public class SQLUserDao implements UserDAO {
 		boolean flag=false; 
 		ConnectionPool pool=ConnectionManager.getPool();
 		Connection connection=pool.getConnection();
-		String sql="SELECT *FROM privatebooks WHERE id="+id;
-		Statement st=null; 
+		
+		PreparedStatement st=null; 
 		try {
-			st=connection.createStatement();
-			ResultSet rs = st.executeQuery(sql);
+			st=connection.prepareStatement(SQLStatement.CHECK_PRIVATE_BOOK);
+			st.setInt(1, id);
+			ResultSet rs = st.executeQuery();
 		while(rs.next()) {
 			flag=true;
 		}
 			} catch (SQLException e) {
-				throw new DaoException("Connection problems",e);
+				throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}finally {
 				try {
-					st.close();
-					pool.freeConnection(connection);
+					if(connection!=null) {
+						connection.setAutoCommit(true);
+						st.close();
+						pool.freeConnection(connection);
+						}
 					
 				} catch (SQLException e) {
-					throw new DaoException("Connection problems",e);
+					throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}
 			}
 		return flag;
@@ -441,19 +472,24 @@ public class SQLUserDao implements UserDAO {
 	public void editUserName(int id, String name) throws DaoException {
 		ConnectionPool pool=ConnectionManager.getPool();
 		Connection connection=pool.getConnection();
-		String sql="UPDATE userprofile SET name='"+name+"' WHERE users_id="+id;
+		
 		PreparedStatement st=null; 
 		try {
-			st=connection.prepareStatement(sql);
+			st=connection.prepareStatement(SQLStatement.EDIT_USER_NAME);
+			st.setInt(2, id);
+			st.setString(1, name);
 			st.executeUpdate();
 			} catch (SQLException e) {
-				throw new DaoException("Connection problems",e);
+				throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}finally {
 				try {
-					st.close();
-					pool.freeConnection(connection);				
+					if(connection!=null) {
+						connection.setAutoCommit(true);
+						st.close();
+						pool.freeConnection(connection);
+						}				
 				} catch (SQLException e) {
-					throw new DaoException("Connection problems",e);
+					throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}
 			}
 		
@@ -463,19 +499,24 @@ public class SQLUserDao implements UserDAO {
 	public void editUserSurname(int id, String surName) throws DaoException {
 		ConnectionPool pool=ConnectionManager.getPool();
 		Connection connection=pool.getConnection();
-		String sql="UPDATE userprofile SET surname='"+surName+"' WHERE users_id="+id;
+		
 		PreparedStatement st=null; 
 		try {
-			st=connection.prepareStatement(sql);
+			st=connection.prepareStatement(SQLStatement.EDIT_USER_SURNAME);
+			st.setString(1, surName);
+			st.setInt(2, id);
 			st.executeUpdate();
 			} catch (SQLException e) {
-				throw new DaoException("Connection problems",e);
+				throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}finally {
 				try {
-					st.close();
-					pool.freeConnection(connection);				
+					if(connection!=null) {
+						connection.setAutoCommit(true);
+						st.close();
+						pool.freeConnection(connection);
+						}			
 				} catch (SQLException e) {
-					throw new DaoException("Connection problems",e);
+					throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}
 			}
 		
@@ -486,23 +527,26 @@ public class SQLUserDao implements UserDAO {
 		String name=null; 
 		ConnectionPool pool=ConnectionManager.getPool();
 		Connection connection=pool.getConnection();
-		String sql="SELECT *FROM userprofile WHERE users_id="+id;
-		Statement st=null; 
+		PreparedStatement st=null; 
 		try {
-			st=connection.createStatement();
-			ResultSet rs = st.executeQuery(sql);
+			st=connection.prepareStatement(SQLStatement.GET_USER_NAME);
+			st.setInt(1, id);
+			ResultSet rs = st.executeQuery();
 		while(rs.next()) {
 			name=rs.getString(1);
 		}
 			} catch (SQLException e) {
-				throw new DaoException("Connection problems",e);
+				throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}finally {
 				try {
-					st.close();
-					pool.freeConnection(connection);
+					if(connection!=null) {
+						connection.setAutoCommit(true);
+						st.close();
+						pool.freeConnection(connection);
+						}
 					
 				} catch (SQLException e) {
-					throw new DaoException("Connection problems",e);
+					throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}
 			}
 		return name;
@@ -512,11 +556,13 @@ public class SQLUserDao implements UserDAO {
 	public void editUserImage(int id,String name,String fullPath,Part file) throws DaoException {
 		ConnectionPool pool=ConnectionManager.getPool();
 		Connection connection=pool.getConnection();
-		String sql="UPDATE userprofile SET image='"+name+"' WHERE users_id="+id;
+	
 		PreparedStatement st=null;
 		try {
 			connection.setAutoCommit(false);
-			st=connection.prepareStatement(sql);
+			st=connection.prepareStatement(SQLStatement.EDIT_USER_IMAGE);
+			st.setString(1, name);
+			st.setInt(2, id);
 			st.execute();
 			file.write(fullPath);
 			connection.commit();
@@ -525,11 +571,11 @@ public class SQLUserDao implements UserDAO {
 					connection.rollback();
 					e.printStackTrace();
 				} catch (SQLException e1) {
-					throw new DaoException("Connection problems",e);
+					throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 				}
-				throw new DaoException("Connection problems",e);
+				throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			} catch (IOException e) {
-				throw new DaoException("Connection problems",e);
+				throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}finally {
 				try {
 					if(connection!=null) {
@@ -538,9 +584,50 @@ public class SQLUserDao implements UserDAO {
 					pool.freeConnection(connection);
 					}
 				} catch (SQLException e) {
-					throw new DaoException("Connection problems",e);
+					throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
 			}
 			}
+		
+	}
+
+	@Override
+	public List<Book> getBestsellers() throws DaoException {
+List<Book> bookList = new ArrayList<>();
+		
+		ConnectionPool pool=ConnectionManager.getPool();
+		Connection connection=pool.getConnection();
+		Statement st=null; 
+		try {
+			st=connection.createStatement();
+			ResultSet rs = st.executeQuery(SQLStatement.GET_BESTSELLERS);
+			while(rs.next())
+			{	
+				int id=rs.getInt(1);
+				String bookName = rs.getString(2);
+				String bookImage=rs.getString(3);
+				String bookDescription=rs.getString(4);
+				int amount=rs.getInt(5);
+				String bookAuthor = rs.getString(6);
+				String specification= rs.getString(7);
+				
+				bookList.add(new Book(id,bookName,bookAuthor,bookImage,amount,specification,bookDescription));
+			}
+			} catch (SQLException e) {
+				throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
+			}finally {
+				try {
+					if(connection!=null) {
+						connection.setAutoCommit(true);
+						st.close();
+						pool.freeConnection(connection);
+						}
+					
+				} catch (SQLException e) {
+					throw new DaoException(DAOWarning.CONNECTION_PROBLEMS,e);
+			}
+			}
+		return bookList;
+		
 		
 	}
 

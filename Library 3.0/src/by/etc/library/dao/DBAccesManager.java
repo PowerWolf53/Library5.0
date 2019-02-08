@@ -4,7 +4,13 @@ package by.etc.library.dao;
 import java.io.IOException;
 import java.util.Properties;
 
+
+
+
+
 public class DBAccesManager {
+	
+	private static final String PROPERTIES="db.properties";
 	
 	private String user;
 	
@@ -21,24 +27,26 @@ public class DBAccesManager {
 	private String password;
 	
 	
-	
-	public DBAccesManager()
+	public DBAccesManager() throws DaoException
 	{
 		Properties prop=new Properties();
 		
+		
 		 try {
-			prop.load(DBAccesManager.class.getClassLoader().getResourceAsStream("db.properties"));
-			setUser(prop.getProperty("user"));
-			setPassword(prop.getProperty("password"));
-			setSize(Integer.parseInt(prop.getProperty("size")));
-			setParams(prop.getProperty("params"));
-			setUrl(prop.getProperty("url"));
-			setDb(prop.getProperty("db"));
-			setDriver(prop.getProperty("driver"));
-			System.out.println(getParams());
+			prop.load(DBAccesManager.class.getClassLoader().getResourceAsStream(PROPERTIES));
+			setUser(prop.getProperty(DBParam.USER));
+			setPassword(prop.getProperty(DBParam.PASSWORD));
+			setSize(Integer.parseInt(prop.getProperty(DBParam.SIZE)));
+			setParams(prop.getProperty(DBParam.PARAMS));
+			setUrl(prop.getProperty(DBParam.URL));
+			setDb(prop.getProperty(DBParam.DB));
+			setDriver(prop.getProperty(DBParam.DRIVER));
+			
 			
 		} catch (IOException e) {
-			//log
+			 
+			throw new DaoException("connection problems");
+			
 		}
 		
 	}

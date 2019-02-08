@@ -18,5 +18,7 @@ public interface BookService {
 	
 	public ServiceResponse getOrders() throws ServiceException;
 	
+	public ServiceResponse getBestsellers() throws ServiceException;
+	
 	
 }

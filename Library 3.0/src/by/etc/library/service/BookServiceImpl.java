@@ -1,5 +1,7 @@
 package by.etc.library.service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.http.Part;
@@ -11,6 +13,7 @@ import by.etc.library.controller.RequestParam;
 import by.etc.library.dao.BookDAO;
 import by.etc.library.dao.DAOFactory;
 import by.etc.library.dao.DaoException;
+import by.etc.library.dao.UserDAO;
 
 public class BookServiceImpl implements BookService {
 
@@ -25,7 +28,7 @@ public class BookServiceImpl implements BookService {
 		try {
 			if(dao.getBookId(name)!=0)
 			{
-				throw new ServiceException("book already exists");
+				throw new ServiceException(ServiceWarning.BOOK_ALREADY_EXISTS);
 			}
 			Book book=new Book(name, author, image, Integer.parseInt(ammount), specification, description);
 			dao.addBook(book,file,fullpath);
@@ -47,7 +50,7 @@ public class BookServiceImpl implements BookService {
 			int id=dao.getBookId(name);
 			if(id==0)
 			{
-				throw new ServiceException("no such book exists");
+				throw new ServiceException(ServiceWarning.NO_SUCH_BOOK);
 			}
 			number+=dao.getBookAmmount(id);
 			dao.ChangeBookAmmoutn(id, number);
@@ -94,6 +97,25 @@ public class BookServiceImpl implements BookService {
 			resp.addRequestParams(RequestParam.ORDERS, orderList);
 		} catch (DaoException e) {
 			throw new ServiceException(e.getMessage(),e);
+		}
+		return resp;
+	}
+
+	@Override
+	public ServiceResponse getBestsellers() throws ServiceException {
+		UserDAO dao=DAOFactory.getInstance().getUserDao();
+		ServiceResponse resp=new ServiceResponse();
+		try {
+			List<Book> randomBookList=new ArrayList<>();
+			List<Book> bookList= dao.getBestsellers();
+			Collections.shuffle(bookList);
+	
+			for(int i=0;i<3;i++) {
+				randomBookList.add(bookList.get(i));
+			}
+			resp.addRequestParams(RequestParam.BOOKS, randomBookList);
+		} catch (DaoException e) {
+			throw new ServiceException(e.getMessage());
 		}
 		return resp;
 	}

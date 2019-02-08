@@ -21,6 +21,35 @@ height: 100%;
     background-repeat: no-repeat;
 }
 
+#block2{
+	position:absolute;
+	top:847px;
+	height: 700px;
+    width:1100px;
+    background-image: url(../images/post3.jpg);
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+#block3{
+	position:absolute;
+	top:847px;
+	height: 619px;
+	left:1100px;
+    width:800px;
+    background-image: url(../images/post4.jpg);
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+#block4{
+	position:absolute;
+	bottom:-833px;
+	width:100%;
+	background-color:rgba(230, 202, 158, 0.4);
+	height:98px;
+	z-index:4;
+}
+
 .menu{
     position: relative; 
     height:80px;
@@ -28,7 +57,7 @@ height: 100%;
 }
 
 html{
-    height: 100%;
+    height: 150%;
 }
 
 .nav-text{
@@ -40,7 +69,8 @@ html{
     color: white;
 }
 body{
-   height: 120%; 
+   height: 120%;
+   overflow-x:hidden;
 }
 #logout{
     position:absolute;

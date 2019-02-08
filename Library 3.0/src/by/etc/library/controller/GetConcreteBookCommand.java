@@ -11,7 +11,7 @@ public class GetConcreteBookCommand implements Command {
 
 	@Override
 	public String execute(HttpServletRequest request) {
-		int id =Integer.parseInt(request.getParameter("id"));
+		int id =Integer.parseInt(request.getParameter(RequestParam.ID));
 		BookService serv = ServiceFactory.getInstance().getBookService();
 		try {
 			ServiceResponse resp = serv.getConcreteBook(id);

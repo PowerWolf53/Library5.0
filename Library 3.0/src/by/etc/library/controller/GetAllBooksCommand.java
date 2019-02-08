@@ -15,7 +15,7 @@ public class GetAllBooksCommand implements Command {
 		ServiceResponse resp=null;
 		try {
 			resp=serv.getAllBooks();
-			request.setAttribute(RequestParam.BOOKS, resp.getRequestParam("all_books"));
+			request.setAttribute(RequestParam.BOOKS, resp.getRequestParam(RequestParam.ALL_BOOKS));
 		} catch (ServiceException e) {
 			request.setAttribute(RequestParam.ERROR, e.getMessage());
 			return JSPPage.MAIN_PAGE;

@@ -32,4 +32,29 @@ public final class RequestParam {
 	
 	public static final String PRIVATE_BOOK_ID="private_book_id";
 	
+	public static final String LOCALE="locale";
+	
+	public static final String NAME="name";
+	
+	public static final String AUTHOR="author";
+	
+	public static final String SPECIFICATION="specification";
+	
+	public static final String AMMOUNT="ammount";
+	
+	public static final String DESCRIPTION="description";
+	
+	public static final String BOOK_FILE="bookfile";
+	
+	public static final String USER_FILE="userfile";
+	
+	public static final String SURNAME="surname";
+	
+	public static final String ID="id";
+	
+	
+	
+
+	
+	
 }

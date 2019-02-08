@@ -48,7 +48,7 @@ public class ConnectionPool {
 			Class.forName(driver);
 			
 		} catch (ClassNotFoundException e1) {
-			throw new DaoException("connection problems");
+			throw new DaoException(DAOWarning.CONNECTION_PROBLEMS);
 		}
 		for(int i=0;i<size;i++)
 		{

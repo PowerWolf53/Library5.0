@@ -18,16 +18,11 @@
 </head>
 <body>
 
- 	<%
-       	if(request.getSession().getAttribute("bundle")==null)
-       	{
-       		ResourceBundle bundle=ResourceBundle.getBundle("locales/resources");
-       		request.getSession().setAttribute("bundle", bundle);
-       	}
-       
+ 
 
-
-%>
+ <c:if test="${bundle==null}">
+            <script>get_eng_locale()</script>
+        </c:if>
 
  <c:if test="${error!=null}">
             <script>alert('${error}')</script>
@@ -88,23 +83,23 @@
             <div class="container-fluid row" id="sub" style="display:none">
             
             <div style="width:25%;position:absolute;height:50px;" >
-                <a style="cursor:pointer;color:white;" class="nav-text" href="panel.jsp" >Manage books</a>
+                <a style="cursor:pointer;color:white;" class="nav-text" href="panel.jsp" >${bundle.getString('manage_books')}</a>
                
             </div>
             
             <div style="width:25%;position:absolute;height:50px;right:40%" >
-                <a style="cursor:pointer;color:white;" href="orderpanel.jsp"  class="nav-text" >Manage orders</a>
+                <a style="cursor:pointer;color:white;" href="orderpanel.jsp"  class="nav-text" >${bundle.getString('manage_orders')}</a>
             </div>
             
              <div style="width:25%;position:absolute;height:50px;right:0%" >
              
-                <a style="cursor:pointer;color:white;"  class="nav-text" href="userbooks.jsp">Private Books</a>
+                <a style="cursor:pointer;color:white;"  class="nav-text" href="userbooks.jsp">${bundle.getString('private_books')}</a>
             </div>
             </div>
          </div>
          
          
-          <div  style="position:fixed;width:70px;height:180px;bottom:10px;left:30px;" >
+          <div  style="position:fixed;width:70px;height:180px;bottom:10px;left:30px;z-index:5" >
            <img  onclick="get_eng_locale()" style="cursor:pointer;position:relative;width:100%;height:25%;" src="images/england.png">
            <img onclick="get_ger_locale()" style="cursor:pointer;position:relative;width:100%;height:25%;margin-top:20%;" src="images/germany.jpg">
            <img onclick="get_ru_locale()" style="cursor:pointer;position:relative;width:100%;height:25%;margin-top:20%;" src="images/russia.jpg">

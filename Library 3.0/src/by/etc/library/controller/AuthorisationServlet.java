@@ -21,7 +21,8 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/AuthorisationServlet")
 public class AuthorisationServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+      
+	private static final String COMMAND="command";
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -41,13 +42,12 @@ public class AuthorisationServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.setCharacterEncoding("UTF-8");
-		request.setCharacterEncoding("UTF-8");
+		
 		ComandManager manager=ComandManager.getInstance();
-		Command com =manager.getCommand(request.getParameter("command"));
+		Command com =manager.getCommand(request.getParameter(COMMAND));
 		String page=com.execute(request);
 		
-		System.out.println(request.getSession().getAttribute("status"));
+		
 		
 		
 		request.getRequestDispatcher(page).forward(request, response);

@@ -24,10 +24,10 @@
 	<div id="bookinfo">
 	
 	<div style="position:absolute;width:45%;height:100%;left:0%;">
-		<a style="font-family: Philosopher;position:absolute;top:10%;font-size:20pt;left:20%;">Name:</a>
-		<a style="font-family: Philosopher;position:absolute;top:20%;font-size:20pt;left:20%;">Author:</a>
-		<a style="font-family: Philosopher;position:absolute;top:30%;font-size:20pt;left:20%;">Ammount:</a>
-		<a style="font-family: Philosopher;position:absolute;top:40%;font-size:20pt;left:20%;">Description:</a>
+		<a style="font-family: Philosopher;position:absolute;top:10%;font-size:20pt;left:20%;">${bundle.getString('book_name')}:</a>
+		<a style="font-family: Philosopher;position:absolute;top:20%;font-size:20pt;left:20%;">${bundle.getString('author_name')}:</a>
+		<a style="font-family: Philosopher;position:absolute;top:30%;font-size:20pt;left:20%;">${bundle.getString('amount')}:</a>
+		<a style="font-family: Philosopher;position:absolute;top:40%;font-size:20pt;left:20%;">${bundle.getString('description')}:</a>
 	</div>	
 		
 	<div style="position:absolute;width:45%;height:100%;left:45%;">
@@ -50,7 +50,7 @@
     border-radius: 15px;">
 		
 		<div onclick="order(${id},${book.getId()})" id="order"  >
-		<a style="position:relative;top:5%;left:30%;">Order</a>
+		<a style="position:relative;top:0%;left:10%;">${bundle.getString('order_book')}</a>
 		</div>
 		</div>
 		</c:if>

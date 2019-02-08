@@ -34,5 +34,6 @@ public class ComandName {
 	
 	public static final String EDIT_PROFILE="edit_profile";
 
+	public static final String GET_BESTSELLERS="get_bestsellers";
 	
 }

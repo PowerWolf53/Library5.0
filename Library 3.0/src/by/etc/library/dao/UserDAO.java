@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.Part;
 
+import by.etc.library.bean.Book;
 import by.etc.library.bean.User;
 import by.etc.library.bean.UserBook;
 
@@ -42,4 +43,6 @@ public interface UserDAO {
 	public String getUserName(int id) throws DaoException;
 	
 	public void editUserImage(int id,String name,String fullPath,Part file) throws DaoException;
+	
+	public List<Book> getBestsellers() throws DaoException;
 }

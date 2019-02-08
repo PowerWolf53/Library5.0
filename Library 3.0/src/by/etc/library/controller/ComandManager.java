@@ -32,6 +32,7 @@ public class ComandManager {
 		comands.put(ComandName.GET_USER_BOOKS, new GetUserBooksCommand());
 		comands.put(ComandName.REFUND_BOOK, new RefundBookCommand());
 		comands.put(ComandName.EDIT_PROFILE, new EditProfileCommand());
+		comands.put(ComandName.GET_BESTSELLERS, new GetBestsellersCommand());
 	}
 	
 	public Command getCommand(String command)

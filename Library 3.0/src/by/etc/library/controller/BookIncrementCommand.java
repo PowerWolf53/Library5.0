@@ -11,8 +11,8 @@ public class BookIncrementCommand implements Command {
 	@Override
 	public String execute(HttpServletRequest request) {
 		BookService serv=ServiceFactory.getInstance().getBookService();
-		String name=request.getParameter("name");
-		String ammount = request.getParameter("ammount");
+		String name=request.getParameter(RequestParam.NAME);
+		String ammount = request.getParameter(RequestParam.AMMOUNT);
 		try {
 			serv.incrementAmmount(name, ammount);
 		} catch (ServiceException e) {

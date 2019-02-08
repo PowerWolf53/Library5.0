@@ -23,18 +23,18 @@
         
 
  <div class="d-none d-md-block container-fluid  row " id="block1">
-<div class="container-fluid row" style="width:70%;height:auto;left:20%;position:relative;top:20px;min-height:900px;background-color:white;background-color:rgba(255, 255, 255, 0.8);border-radius:30px;">
+<div class="container-fluid row" style="width:70%;height:auto;left:20%;position:relative;top:20px;min-height:900px;overflow:scroll;background-color:rgba(255, 255, 255, 0.8);border-radius:30px;">
 		  
-		  <a style="position:absolute;font-size:20pt;left:40%;top:50px">Manage orders</a>
+		  <a style="position:absolute;font-size:20pt;left:40%;top:50px">${bundle.getString('manage_orders')}</a>
 		  
 		  <table style="position:relative;width:90%;left:5%;top:150px;" id="table" border="1" width="100%" cellpadding="5">
    <tr>
-    <th>Номер заказа</th>
-    <th>Название книги</th>
-	   <th>Имя пользователя</th>
-	   <th>Назначить время сдачи</th>
-	<th>Отмена зааза</th>
-	<th>Подтверждение заказа</th>
+    <th>${bundle.getString('order_id')} </th>
+    <th>${bundle.getString('book_name')} </th>
+	   <th>${bundle.getString('user_name')} </th>
+	   <th>${bundle.getString('set_refund_date')} </th>
+	<th>${bundle.getString('cancel_order')} </th>
+	<th>${bundle.getString('submit_order')} </th>
    </tr>
    
    <c:forEach var="order" items="${orders}" >
@@ -51,17 +51,18 @@
 		</form>
 	</td>
 	
-	  <td onclick="cancel('${order.getId()}')" id="cancel">Отменить заказ</td>
-	  <td onclick = "submit('${order.getId()}',${order.getBookId()},'year${order.getId()}','month${order.getId()}','day${order.getId()}',${order.getUserId()})" id="subm">Принять заказ</td>
+	  <td onclick="cancel('${order.getId()}')" id="cancel">${bundle.getString('cancel_order')}</td>
+	  <td onclick ="submit('${order.getId()}',${order.getBookId()},'year${order.getId()}','month${order.getId()}','day${order.getId()}',${order.getUserId()})" id="subm">${bundle.getString('submit_order')}</td>
   </tr>
+
    </c:forEach>
   
- 
+   </table>
   
   
   
 
- </table>
+ 
 		  
 		  </div>
 		    </div>

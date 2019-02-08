@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.servlet.http.Part;
 
+
+
 import by.etc.library.bean.PrivateBook;
 import by.etc.library.bean.PrivateBookOrder;
 import by.etc.library.bean.ServiceResponse;
@@ -26,13 +28,16 @@ public class UserServiceImpl implements UserService {
 	private static final String imgfolder="images/";
 	
 	
+	
+	
 	@Override
 	public ServiceResponse signIn(String login,String password) throws ServiceException {
 		ServiceResponse resp=new ServiceResponse();
 		try {
 			int id=userDao.getUserId(login, password);
 			if(id==0){
-				throw new ServiceException("Wrong login or password");
+				
+				throw new ServiceException(ServiceWarning.WRONG_LOGIN_OR_PASSWORD);
 			}else {
 				resp.addSessionParam(SessionParam.ID,Integer.toString(id));
 				resp.addSessionParam(SessionParam.STATUS,userDao.getUserStatus(id));
@@ -51,7 +56,7 @@ public class UserServiceImpl implements UserService {
 			boolean flag = userDao.checkUser(login, password);
 			if(flag==true)
 			{
-				throw new ServiceException("User already exists");
+				throw new ServiceException(ServiceWarning.USER_ALREADY_EXISTS);
 			}else {				
 				userDao.addUser(login, password,name,surname);
 			}
@@ -66,7 +71,7 @@ public class UserServiceImpl implements UserService {
 	public void orderBook(int bookId, int userId) throws ServiceException {
 		try {
 			if(userDao.getBookOrderId(bookId, userId)!=0) {
-				throw new ServiceException("Order already exists");	
+				throw new ServiceException(ServiceWarning.ORDER_ALREADY_EXISTS);	
 			}else {
 				userDao.orderBook(bookId, userId);
 			}
@@ -92,7 +97,7 @@ public class UserServiceImpl implements UserService {
 		BookDAO dao2=DAOFactory.getInstance().getBookDao();
 		try {
 			if(dao2.getBookAmmount(bookId)==0) {
-				throw new ServiceException("Not enough books");
+				throw new ServiceException(ServiceWarning.NOT_ENOUGH_BOOKS);
 			}
 			dao.SubmitOrder(orderId, userId, bookId, date);
 			int ammount=dao2.getBookAmmount(bookId);
@@ -120,7 +125,7 @@ public class UserServiceImpl implements UserService {
 			bookOrderList=bookDao.getPrivateOrders(id);
 			
 			bookList=bookDao.getPrivateBooks(id);
-			System.out.println("executed");
+			
 			resp.addRequestParams(RequestParam.BOOKS, bookList);
 			resp.addRequestParams(RequestParam.ORDERS, bookOrderList);
 			resp.addRequestParams(RequestParam.PROFILE_INFO, user);
@@ -148,7 +153,7 @@ public class UserServiceImpl implements UserService {
 	public void refundBook(int id) throws ServiceException {
 		try {
 			if(userDao.checkPrivateBook(id)==false) {
-				throw new ServiceException(" private book not found");
+				throw new ServiceException(ServiceWarning.PRIVATE_BOOK_NOT_FOUND);
 			}else {
 			userDao.deletePrivateBook(id);
 			}
@@ -168,10 +173,13 @@ public class UserServiceImpl implements UserService {
 				if(surName.length()!=0&&surName!=null) {
 					userDao.editUserSurname(id, surName);
 				}
-				if(file!=null) {
+				if(file.getSize()!=0) {
+					
 					String fileName=userDao.getUserName(id);
 					String fullPath=folder+imgfolder+fileName+id+".jpg";
+					
 					String simpleName=fileName+id+".jpg";
+					
 					userDao.editUserImage(id, simpleName,fullPath, file);
 				}
 			} catch (DaoException e) {

@@ -10,13 +10,13 @@ public class OrderBookCommand implements Command {
 
 	@Override
 	public String execute(HttpServletRequest request) {
-		String userId=request.getParameter("id");
-		String bookId=request.getParameter("book_id");
+		String userId=request.getParameter(RequestParam.ID);
+		String bookId=request.getParameter(RequestParam.BOOK_ID);
 		UserService serv= ServiceFactory.getInstance().getUserService();
 		try {
 			serv.orderBook(Integer.parseInt(bookId), Integer.parseInt(userId));
 		} catch (NumberFormatException e) {
-			request.setAttribute(RequestParam.ERROR, "something went wrong");
+			request.setAttribute(RequestParam.ERROR, ControllerWarning.WRONG);
 		} catch (ServiceException e) {
 			request.setAttribute(RequestParam.ERROR, e.getMessage());
 		}

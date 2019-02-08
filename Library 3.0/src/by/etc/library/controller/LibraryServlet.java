@@ -17,8 +17,10 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/LibraryServlet")
 @MultipartConfig
 public class LibraryServlet extends HttpServlet {
+	
 	private static final long serialVersionUID = 1L;
-       
+    
+	private static final String COMMAND="command";
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -31,18 +33,16 @@ public class LibraryServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println(request.getParameter("name"));
-		System.out.println("servlet executed");
+		
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.setCharacterEncoding("UTF-8");
-		request.setCharacterEncoding("UTF-8");
+		
 		ComandManager manager =ComandManager.getInstance();
-		Command com=manager.getCommand(request.getParameter("command"));
+		Command com=manager.getCommand(request.getParameter(COMMAND));
 		request.getRequestDispatcher(com.execute(request)).forward(request, response);
 		
 		

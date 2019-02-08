@@ -10,14 +10,20 @@
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
   <context-param>
-    <param-name>books_folder</param-name>
-    <param-value>D:\\Eclipse\\epam.projects\\Library 3.0\\WebContent\\bookimages\\</param-value>
+    <param-name>log4j-config-location</param-name>
+    <param-value>WEB-INF/log4j.properties</param-value>
   </context-param>
   <servlet>
     <description></description>
     <display-name>AuthorisationServlet</display-name>
     <servlet-name>AuthorisationServlet</servlet-name>
     <servlet-class>by.etc.library.controller.AuthorisationServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <description></description>
+    <display-name>LibraryServlet</display-name>
+    <servlet-name>LibraryServlet</servlet-name>
+    <servlet-class>by.etc.library.controller.LibraryServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>Test</servlet-name>
@@ -31,4 +37,30 @@
     <servlet-name>AuthorisationServlet</servlet-name>
     <url-pattern>/MyServlet</url-pattern>
   </servlet-mapping>
+  <filter>
+    <filter-name>EncodingFilter</filter-name>
+    <filter-class>by.etc.library.controller.EncodingFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>EncodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <filter>
+    <filter-name>AdminFilter</filter-name>
+    <filter-class>by.etc.library.controller.AdminFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>AdminFilter</filter-name>
+    <url-pattern>/panel.jsp</url-pattern>
+    <url-pattern>/orderpanel.jsp</url-pattern>
+    <url-pattern>/userbooks.jsp</url-pattern>
+  </filter-mapping>
+  <filter>
+    <filter-name>UserFilter</filter-name>
+    <filter-class>by.etc.library.controller.UserFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>UserFilter</filter-name>
+    <url-pattern>/profile.jsp</url-pattern>
+  </filter-mapping>
 </web-app>

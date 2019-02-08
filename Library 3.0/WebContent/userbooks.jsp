@@ -30,18 +30,18 @@
 <div class="col-md-6" id="profilearea" style="background-color:rgba(250, 250, 250, 0.8);">
 	
 	
-	<a id="label" style="position:absolute;top:50px;left:32%;font-size:18pt;">Список выданых книг</a>
+	<a id="label" style="position:absolute;top:50px;left:42%;font-size:18pt;">${bundle.getString('private_books')}</a>
 
 	
 	<div  id="books" style="display:block">
 	<table id="table" border="1" width="100%" cellpadding="5">
    <tr>
-    <td>Номер личной книги</td>
-    <th>Имя</th>
-    <th>Фамилия</th>
-    <th>Название</th>
-	  <th>Автор</th>
-    <th>Дата сдачи</th>
+    <td>${bundle.getString('private_book_id')}</td>
+    <th>${bundle.getString('user_name')}</th>
+    <th>${bundle.getString('user_surname')}</th>
+    <th>${bundle.getString('book_name')}</th>
+	  <th>${bundle.getString('author_name')}</th>
+    <th>${bundle.getString('refund_date')}</th>
    </tr>
    
    

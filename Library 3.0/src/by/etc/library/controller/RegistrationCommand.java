@@ -13,8 +13,8 @@ public class RegistrationCommand implements Command {
 	public String execute(HttpServletRequest request) {
 		String login=request.getParameter(RequestParam.LOGIN);
 		String password=request.getParameter(RequestParam.PASSWORD);
-		String name=request.getParameter("name");
-		String surname=request.getParameter("surname");
+		String name=request.getParameter(RequestParam.NAME);
+		String surname=request.getParameter(RequestParam.SURNAME);
 		System.out.println(name+surname);
 		UserService userService=ServiceFactory.getInstance().getUserService();
 		try {

@@ -4,13 +4,18 @@ public class ConnectionManager {
 
 	private static ConnectionPool pool=null;
 	
-	private static final DBAccesManager manager= new DBAccesManager();
+	private static DBAccesManager manager;
 	
-	public static ConnectionPool getPool()
+	public static ConnectionPool getPool() throws DaoException
 	{
+		 
 		if(pool==null)
 		{
 			try {
+				if(manager==null) {
+				 manager= new DBAccesManager();
+				 
+				}
 				String user=manager.getUser();
 				String db=manager.getDb();		
 				String password=manager.getPassword();		
@@ -21,7 +26,7 @@ public class ConnectionManager {
 				pool=new ConnectionPool(db,params,user,password,url,driver,size);
 			} catch (DaoException e) {
 				
-			
+			throw new DaoException(e.getMessage());
 			}
 	}
 		return pool;

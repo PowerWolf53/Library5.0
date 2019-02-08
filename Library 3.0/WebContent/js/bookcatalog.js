@@ -1,14 +1,7 @@
 
 
 
-	function send(){
-        $.ajax
-        ({
-            type: "GET",//Метод передачи
-            url: 'TestServlet',//Название сервлета
-            data: { name: "John", location: "Boston" }  
-        });
-	}
+	
   
 	function se()
 	{

@@ -14,9 +14,9 @@ public class GetLocaleCommand  implements Command{
 	public String execute(HttpServletRequest request) {
 		ServiceFactory factory=ServiceFactory.getInstance();
 		LocalisationService service= factory.getLocalisationService();
-		String loc=request.getParameter("locale");
+		String loc=request.getParameter(RequestParam.LOCALE);
 		ServiceResponse resp = service.getLocale(loc);
-		request.getSession().setAttribute("bundle", resp.getSessionParam("bundle"));
+		request.getSession().setAttribute(SessionParam.BUNDLE, resp.getSessionParam(SessionParam.BUNDLE));
 		return null;
 	}
 

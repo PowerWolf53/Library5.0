@@ -13,28 +13,30 @@ import by.etc.library.service.ServiceFactory;
 
 public class BookAdditionCommand implements Command {
 
+	private static final String ADMIN="admin";
+	
 	@Override
 	public String execute(HttpServletRequest request) {
-		if("admin".equals(request.getSession().getAttribute(SessionParam.STATUS))==false)
+		if(ADMIN.equals(request.getSession().getAttribute(SessionParam.STATUS))==false)
 		{
-			request.setAttribute(RequestParam.ERROR, "You dont have enough rights");
+			request.setAttribute(RequestParam.ERROR, ControllerWarning.NOT_ENOUGH_RIGHTS);
 			return JSPPage.MAIN_PAGE;
 		}
 		try {
-		String name = request.getParameter("name");
-		String author=  request.getParameter("author");
-		String specification =  request.getParameter("specification");
-		String ammount = request.getParameter("ammount");
-		String description=  request.getParameter("description");
-		Part file = request.getPart("bookfile");
-		String path=request.getParameter("folder");
+		String name = request.getParameter(RequestParam.NAME);
+		String author=  request.getParameter(RequestParam.AUTHOR);
+		String specification =  request.getParameter(RequestParam.SPECIFICATION);
+		String ammount = request.getParameter(RequestParam.AMMOUNT);
+		String description=  request.getParameter(RequestParam.DESCRIPTION);
+		Part file = request.getPart(RequestParam.BOOK_FILE);
+		String path=request.getServletContext().getRealPath("/");
 		BookService serv = ServiceFactory.getInstance().getBookService();
 		serv.addBook(name, author, specification, ammount,description,path,file);
 		} catch (IOException e) {
-			request.setAttribute(RequestParam.ERROR, "Something went wrong");
+			request.setAttribute(RequestParam.ERROR, ControllerWarning.WRONG);
 			return JSPPage.PANEL_PAGE;
 		} catch (ServletException e) {
-			request.setAttribute(RequestParam.ERROR, "Something went wrong");
+			request.setAttribute(RequestParam.ERROR, ControllerWarning.WRONG);
 			return JSPPage.PANEL_PAGE;
 		} catch (ServiceException e) {
 			request.setAttribute(RequestParam.ERROR, e.getMessage());

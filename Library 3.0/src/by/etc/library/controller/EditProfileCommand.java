@@ -15,9 +15,9 @@ public class EditProfileCommand implements Command {
 	@Override
 	public String execute(HttpServletRequest request) {
 		try {
-			Part file = request.getPart("userfile");
-			String name=request.getParameter("name");
-			String surname=request.getParameter("surname");
+			Part file = request.getPart(RequestParam.USER_FILE);
+			String name=request.getParameter(RequestParam.NAME);
+			String surname=request.getParameter(RequestParam.SURNAME);
 			int id =Integer.parseInt((String) request.getSession().getAttribute(SessionParam.ID));
 			String path=request.getServletContext().getRealPath("/");
 			UserService serv=ServiceFactory.getInstance().getUserService();
@@ -28,10 +28,10 @@ public class EditProfileCommand implements Command {
 				return JSPPage.PROFILE_PAGE;
 			}
 		} catch (IOException e) {
-			request.setAttribute(RequestParam.ERROR,"Server probles");
+			request.setAttribute(RequestParam.ERROR,ControllerWarning.WRONG);
 			return JSPPage.PROFILE_PAGE;
 		} catch (ServletException e) {
-			request.setAttribute(RequestParam.ERROR,"Server probles");
+			request.setAttribute(RequestParam.ERROR,ControllerWarning.WRONG);
 			return JSPPage.PROFILE_PAGE;
 		}
 		return JSPPage.PROFILE_PAGE;
